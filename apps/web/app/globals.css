@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens defined as CSS custom properties. These values feed into the
+   Tailwind configuration via the `hsl(var(--color-…))` syntax. Adjust them
+   here to theme your application. */
+:root {
+  --color-primary: 222 47% 11%;
+  --color-primary-foreground: 210 40% 98%;
+  --color-secondary: 210 38% 95%;
+  --color-secondary-foreground: 222 47% 11%;
+  --color-accent: 210 40% 90%;
+  --color-accent-foreground: 222 47% 11%;
+  --color-muted: 220 14% 96%;
+  --color-muted-foreground: 217 19% 27%;
+  --color-success: 146 70% 45%;
+  --color-success-foreground: 210 40% 98%;
+  --color-warning: 36 100% 50%;
+  --color-warning-foreground: 210 40% 98%;
+  --color-danger: 0 85% 60%;
+  --color-danger-foreground: 210 40% 98%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --color-primary: 222 47% 90%;
+  --color-primary-foreground: 222 47% 11%;
+  --color-secondary: 215 28% 17%;
+  --color-secondary-foreground: 210 40% 98%;
+  --color-accent: 217 19% 27%;
+  --color-accent-foreground: 210 40% 98%;
+  --color-muted: 222 47% 11%;
+  --color-muted-foreground: 222 47% 90%;
+  --color-success: 146 70% 45%;
+  --color-success-foreground: 222 47% 11%;
+  --color-warning: 36 100% 50%;
+  --color-warning-foreground: 222 47% 11%;
+  --color-danger: 0 85% 60%;
+  --color-danger-foreground: 222 47% 11%;
+  --radius: 0.5rem;
+}
+
+/* Typography tweaks */
+body {
+  @apply bg-background text-foreground min-h-screen antialiased;
+}

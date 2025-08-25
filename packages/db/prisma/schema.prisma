@@ -1,0 +1,188 @@
+// Prisma schema defining the core data model for the SaaS boilerplate.
+//
+// The schema uses PostgreSQL as the underlying database and leverages the
+// pgvector extension for storing high‑dimensional embeddings. Each model
+// includes a `deletedAt` column to enable soft deletes. An audit log table
+// captures all mutations for compliance and debugging purposes.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  companyId   String?
+  company     Company?     @relation(fields: [companyId], references: [id])
+  contacts    ProjectContact[]
+  equipment   Equipment[]
+  documents   Document[]
+  tasks       Task[]
+  estimates   Estimate[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
+}
+
+model Company {
+  id          String     @id @default(cuid())
+  name        String
+  projects    Project[]
+  contacts    Contact[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+}
+
+model Contact {
+  id          String     @id @default(cuid())
+  name        String
+  email       String     @unique
+  phone       String?
+  companyId   String?
+  company     Company?   @relation(fields: [companyId], references: [id])
+  projects    ProjectContact[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+}
+
+model ProjectContact {
+  projectId String
+  contactId String
+  role      String?
+  project   Project @relation(fields: [projectId], references: [id])
+  contact   Contact @relation(fields: [contactId], references: [id])
+  @@id([projectId, contactId])
+}
+
+model Equipment {
+  id        String     @id @default(cuid())
+  projectId String?
+  project   Project?   @relation(fields: [projectId], references: [id])
+  name      String
+  documents Document[]
+  tasks     Task[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?
+}
+
+model Task {
+  id          String         @id @default(cuid())
+  projectId   String?
+  project     Project?       @relation(fields: [projectId], references: [id])
+  equipmentId String?
+  equipment   Equipment?     @relation(fields: [equipmentId], references: [id])
+  title       String
+  description String?
+  status      String
+  assignees   TaskAssignment[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  deletedAt   DateTime?
+}
+
+model TaskAssignment {
+  taskId String
+  userId String
+  role   String?
+  task   Task @relation(fields: [taskId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
+  @@id([taskId, userId])
+}
+
+model Document {
+  id          String     @id @default(cuid())
+  projectId   String?
+  project     Project?   @relation(fields: [projectId], references: [id])
+  equipmentId String?
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+  title       String
+  url         String
+  type        String
+  embeddings  Embedding[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+}
+
+model Estimate {
+  id        String   @id @default(cuid())
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
+  name      String
+  data      Json?
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model User {
+  id           String          @id @default(cuid())
+  name         String
+  email        String          @unique
+  role         String
+  assignments  TaskAssignment[]
+  notifications Notification[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  deletedAt    DateTime?
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+/// The Embedding table stores high‑dimensional vectors for semantic search.
+/// Each record references a Document and contains a 1536‑dimension vector.
+model Embedding {
+  id         String    @id @default(cuid())
+  documentId String
+  document   Document  @relation(fields: [documentId], references: [id])
+  vector     Vector    @db.Vector(1536)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+/// AuditLog captures all mutation events across the system. Application code
+/// should write an entry here on every create/update/delete. This table is
+/// separate from the Prisma models above to avoid coupling it to domain
+/// entities. A PostgreSQL trigger can be added to automatically populate
+/// common fields such as timestamps or user info.
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String
+  payload   Json?
+  createdAt DateTime @default(now())
+}
+
+/// WorkflowRun tracks long‑running jobs such as AI document processing or report
+/// generation. Each run records progress, status and optional logs.
+model WorkflowRun {
+  id        String   @id @default(cuid())
+  entityId String
+  entity   String
+  status   String
+  progress Int      @default(0)
+  logs     Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
