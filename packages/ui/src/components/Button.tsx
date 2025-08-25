@@ -29,7 +29,11 @@ const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
  * design tokens defined in the Tailwind configuration.
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', asChild = false, ...props }, ref) => {
+  (
+    // Extract `type` to avoid being overridden when spreading the remaining props
+    { className, variant = 'default', asChild = false, type, ...props },
+    ref,
+  ) => {
     const Comp: React.ElementType = asChild ? Slot : 'button';
     return (
       <Comp
@@ -39,6 +43,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className,
         )}
         ref={ref}
+        type={type ?? 'button'} // Default to "button" to prevent implicit form submits
         {...props}
       />
     );
