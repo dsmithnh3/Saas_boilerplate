@@ -28,7 +28,8 @@ if (process.env.NODE_ENV !== 'production') {
  * Executes a Prisma operation with retry logic and optional abort support.
  *
  * @param fn The callback that receives the Prisma client and returns a promise.
- * @param abortSignal Optional AbortSignal to cancel the operation.
+ * @param abortSignal Optional AbortSignal to cancel the operation. Consumers can
+ * create an `AbortController` and pass its `signal` to abort long-running queries.
  * @returns The result of the provided callback.
  */
 export async function execute<T>(
@@ -46,6 +47,7 @@ export async function execute<T>(
     {
       retries: 2,
       factor: 2,
+      ...(abortSignal ? { signal: abortSignal } : {}), // allow external cancellation
     },
   );
 }
