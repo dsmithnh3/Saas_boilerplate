@@ -28,15 +28,11 @@ export interface AppShellProps {
  * optional header content. The shell respects user preferences such as
  * reduced motion and supports dark mode via Tailwind's class toggles.
  */
-export const AppShell: React.FC<AppShellProps> = ({
-  children,
-  navItems = [],
-  headerContent,
-}) => {
+export const AppShell: React.FC<AppShellProps> = ({ children, navItems = [], headerContent }) => {
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      {/* Sidebar: hidden on small screens */}
-      <aside className={cn('hidden', 'md:flex', 'w-64', 'border-r', 'bg-muted', 'p-4', 'flex-col')}>\
+      {/* Sidebar: hidden on small screens; removed stray backslash for valid JSX */}
+      <aside className={cn('hidden', 'md:flex', 'w-64', 'border-r', 'bg-muted', 'p-4', 'flex-col')}>
         <h1 className="mb-4 text-lg font-semibold">Menu</h1>
         <nav className="space-y-2">
           {navItems.map(item => (
