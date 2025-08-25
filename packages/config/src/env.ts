@@ -15,6 +15,8 @@ const envSchema = z.object({
   NEXTAUTH_SECRET: z.string().min(32, 'NEXTAUTH_SECRET should be at least 32 characters long'),
   // Public URL where the Next.js application is hosted.
   NEXTAUTH_URL: z.string().url(),
+  // API key for OpenAI or compatible embedding provider.
+  OPENAI_API_KEY: z.string().min(1, 'OPENAI_API_KEY is required'),
   // S3-compatible object storage configuration. Optional if file uploads are disabled.
   S3_ENDPOINT: z.string().url().optional(),
   S3_ACCESS_KEY: z.string().optional(),
