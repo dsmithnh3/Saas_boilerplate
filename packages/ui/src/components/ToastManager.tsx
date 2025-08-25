@@ -1,3 +1,5 @@
+'use client'; // Required for interactive toast notifications
+
 import React, { createContext, useContext, useState } from 'react';
 import { cn } from '../utils/cn';
 
