@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { cn } from '../utils/cn';
 
 type ToastType = 'info' | 'success' | 'error';
@@ -23,15 +23,26 @@ const ToastContext = createContext<ToastContextValue | undefined>(undefined);
  */
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]); // hold active timer IDs
 
   const addToast = (message: string, type: ToastType = 'info') => {
     const id = crypto.randomUUID();
     setToasts(prev => [...prev, { id, message, type }]);
-    // Remove toast after 5 seconds
-    setTimeout(() => {
+    // Schedule removal and store timer to clear on unmount
+    const timeoutId = setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
+      timeoutsRef.current = timeoutsRef.current.filter(tid => tid !== timeoutId);
     }, 5000);
+    timeoutsRef.current.push(timeoutId);
   };
+
+  // Clear all pending timers if provider unmounts to avoid state updates on dead components
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(clearTimeout);
+      timeoutsRef.current = [];
+    };
+  }, []);
 
   return (
     <ToastContext.Provider value={{ addToast }}>
