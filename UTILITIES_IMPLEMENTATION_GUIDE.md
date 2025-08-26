@@ -6,7 +6,7 @@ This guide outlines the comprehensive set of utilities and tools implemented for
 
 ## 📁 File Structure
 
-```
+```bash
 apps/web/src/
 ├── utils/
 │   ├── pdf.ts              # PDF generation and manipulation
@@ -23,14 +23,14 @@ apps/web/src/
 
 ### 1. PDF Generation & Manipulation (`pdf.ts`)
 
-#### **Features:**
+#### **PDF Features:**
 
 - Equipment inspection reports
 - P&ID diagram generation
 - HTML to PDF conversion
 - Custom report templates
 
-#### **Implementation Examples:**
+#### **PDF Implementation Examples:**
 
 ```typescript
 // Generate equipment maintenance report
@@ -53,7 +53,7 @@ const reportData = {
 const pdfBytes = await generateEquipmentReport(reportData);
 ```
 
-#### **Use Cases:**
+#### **PDF Use Cases:**
 
 - **Maintenance Reports**: Generate detailed equipment inspection reports
 - **P&ID Documentation**: Create piping and instrumentation diagrams
@@ -62,7 +62,7 @@ const pdfBytes = await generateEquipmentReport(reportData);
 
 ### 2. File Storage & Management (`fileStorage.ts`)
 
-#### **Features:**
+#### **File Storage Features:**
 
 - Excel import/export functionality
 - File validation and processing
@@ -70,7 +70,7 @@ const pdfBytes = await generateEquipmentReport(reportData);
 - Customer data management
 - Project timeline exports
 
-#### **Implementation Examples:**
+#### **File Storage Implementation Examples:**
 
 ```typescript
 // Export equipment maintenance data
@@ -91,7 +91,7 @@ const equipmentData = [
 exportEquipmentReport(equipmentData);
 ```
 
-#### **Use Cases:**
+#### **File Storage Use Cases:**
 
 - **Data Migration**: Import existing equipment data from Excel
 - **Reporting**: Export maintenance schedules and performance data
@@ -100,7 +100,7 @@ exportEquipmentReport(equipmentData);
 
 ### 3. Engineering Calculations (`engineering.ts`)
 
-#### **Features:**
+#### **Engineering Features:**
 
 - Refrigeration system efficiency calculations (COP)
 - Temperature and pressure conversions
@@ -108,7 +108,7 @@ exportEquipmentReport(equipmentData);
 - Maintenance scheduling algorithms
 - Energy cost calculations
 
-#### **Implementation Examples:**
+#### **Engineering Implementation Examples:**
 
 ```typescript
 // Calculate system performance
@@ -129,7 +129,7 @@ console.log(`Power Consumption: ${performance.powerConsumption.toFixed(2)} kW`);
 console.log(`Cost per Hour: $${performance.costPerHour.toFixed(2)}`);
 ```
 
-#### **Use Cases:**
+#### **Engineering Use Cases:**
 
 - **System Design**: Calculate optimal system configurations
 - **Performance Monitoring**: Track system efficiency over time
@@ -138,7 +138,7 @@ console.log(`Cost per Hour: $${performance.costPerHour.toFixed(2)}`);
 
 ### 4. File Upload Component (`FileUpload.tsx`)
 
-#### **Features:**
+#### **Upload Component Features:**
 
 - Drag and drop file upload
 - File type validation
@@ -146,27 +146,25 @@ console.log(`Cost per Hour: $${performance.costPerHour.toFixed(2)}`);
 - Multiple file support
 - Visual feedback
 
-#### **Implementation Examples:**
+#### **Upload Component Implementation Examples:**
 
 ```tsx
 // Equipment manual upload
 <FileUpload
-  onFilesSelected={(files) => handleManualUpload(files)}
+  onFilesSelected={files => handleManualUpload(files)}
   acceptedTypes={['application/pdf', 'image/*']}
   maxSizeMB={25}
   multiple={false}
   className="mb-4"
 />
-
-// Maintenance photo upload
-<FileUpload
-  onFilesSelected={(files) => handlePhotoUpload(files)}
-  acceptedTypes={['image/*']}
-  maxSizeMB={10}
-  multiple={true}
-  maxFiles={10}
-/>
 ```
+
+#### **Upload Component Use Cases:**
+
+- **Equipment Documentation**: Upload manuals and specifications
+- **Maintenance Photos**: Document maintenance activities
+- **Compliance Documents**: Store regulatory documentation
+- **Customer Files**: Manage customer-specific documentation
 
 ## 🏭 Industrial Refrigeration Specific Applications
 
@@ -228,126 +226,40 @@ console.log(`Priority: ${maintenanceSchedule.priority}`);
 #### **2. Work Order Generation**
 
 ```typescript
-// Generate maintenance work order PDF
-const workOrderData = {
-  title: 'Preventive Maintenance - Compressor COMP-001',
-  equipment: 'Main Compressor',
-  technician: 'Mike Johnson',
-  tasks: [
-    'Check oil level and quality',
-    'Inspect belts and couplings',
-    'Clean condenser coils',
-    'Test safety systems',
-  ],
-  estimatedDuration: '4 hours',
-  requiredParts: ['Oil filter', 'Air filter'],
-};
-```
-
-### **Customer Relationship Management (CRM)**
-
-#### **1. Customer Data Export**
-
-```typescript
-// Export customer data for external CRM
-const customerData = [
-  {
-    id: 'CUST-001',
-    name: 'ABC Manufacturing',
-    email: 'contact@abc.com',
-    phone: '+1-555-0123',
-    company: 'ABC Manufacturing Co.',
-    address: '123 Industrial Blvd, City, State',
-    equipmentCount: 15,
-    totalValue: 250000,
-    lastContact: '2024-01-10',
-  },
-];
-
-exportCustomerData(customerData);
-```
-
-#### **2. Service History Tracking**
-
-```typescript
-// Track service history
-const serviceHistory = {
-  customerId: 'CUST-001',
+// Generate work order from maintenance schedule
+const workOrder = {
+  id: generateUniqueId(),
   equipmentId: 'COMP-001',
-  serviceDate: new Date(),
-  serviceType: 'Preventive Maintenance',
-  technician: 'John Smith',
-  findings: 'All systems operating normally',
-  recommendations: 'Schedule next maintenance in 3 months',
-  photos: ['photo1.jpg', 'photo2.jpg'],
+  type: maintenanceSchedule.maintenanceType,
+  priority: maintenanceSchedule.priority,
+  scheduledDate: maintenanceSchedule.nextMaintenance,
+  estimatedDuration: 4, // hours
+  requiredParts: ['oil_filter', 'air_filter'],
+  technician: assignTechnician(),
 };
 ```
 
-### **Project Management**
+### **Data Visualization**
 
-#### **1. Project Timeline Export**
-
-```typescript
-// Export project timeline
-const projectData = [
-  {
-    id: 'PROJ-001',
-    name: 'System Upgrade - Plant A',
-    status: 'In Progress',
-    startDate: '2024-01-15',
-    endDate: '2024-03-15',
-    progress: 65,
-    assignedTo: 'Engineering Team',
-    priority: 'High',
-    budget: 150000,
-  },
-];
-
-exportProjectTimeline(projectData);
-```
-
-#### **2. Resource Planning**
+#### **1. Performance Dashboards**
 
 ```typescript
-// Calculate resource requirements
-const resourceRequirements = {
-  projectId: 'PROJ-001',
-  manpower: {
-    engineers: 2,
-    technicians: 4,
-    supervisors: 1,
+// Create performance dashboard data
+const dashboardData = {
+  systemPerformance: {
+    cop: calculateCOP(evaporatorTemp, condenserTemp),
+    efficiency: calculateEfficiency(actual, theoretical),
+    energyCost: calculateEnergyCost(power, hours, rate),
   },
-  materials: {
-    compressors: 1,
-    condensers: 2,
-    piping: '500m',
-    refrigerant: '1000kg',
+  maintenanceStatus: {
+    upcoming: getUpcomingMaintenance(),
+    overdue: getOverdueMaintenance(),
+    completed: getCompletedMaintenance(),
   },
-  timeline: {
-    design: '2 weeks',
-    procurement: '4 weeks',
-    installation: '6 weeks',
-    testing: '2 weeks',
-  },
-};
-```
-
-## 📊 Data Visualization & Reporting
-
-### **Performance Dashboards**
-
-#### **1. System Performance Metrics**
-
-```typescript
-// Real-time performance monitoring
-const performanceMetrics = {
-  systemEfficiency: calculateSystemPerformance(system),
-  energyConsumption: calculateEnergyCost(power, hours, rate),
-  maintenanceStatus: calculateMaintenanceSchedule(equipment, hours, lastMaintenance),
-  costAnalysis: {
-    operational: energyCost,
-    maintenance: maintenanceCost,
-    total: energyCost + maintenanceCost,
+  alerts: {
+    critical: getCriticalAlerts(),
+    warnings: getWarningAlerts(),
+    info: getInfoAlerts(),
   },
 };
 ```
@@ -355,195 +267,314 @@ const performanceMetrics = {
 #### **2. Trend Analysis**
 
 ```typescript
-// Historical data analysis
-const trendData = {
-  efficiency: [85, 87, 84, 86, 88, 85, 87],
-  energyCost: [1200, 1180, 1220, 1190, 1170, 1210, 1185],
-  maintenanceCost: [500, 450, 600, 480, 520, 470, 490],
-  dates: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+// Analyze performance trends
+const trendAnalysis = {
+  period: '30 days',
+  metrics: {
+    averageCOP: calculateAverageCOP(historicalData),
+    energyConsumption: calculateTotalEnergy(historicalData),
+    maintenanceCosts: calculateMaintenanceCosts(historicalData),
+    downtime: calculateDowntime(historicalData),
+  },
+  recommendations: generateRecommendations(trendAnalysis),
 };
 ```
 
 ## 🔧 Technical Implementation
 
+### **Database Schema**
+
+#### **Equipment Table**
+
+```sql
+CREATE TABLE equipment (
+  id VARCHAR(50) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  type VARCHAR(100) NOT NULL,
+  location VARCHAR(255),
+  capacity DECIMAL(10,2),
+  refrigerant_type VARCHAR(50),
+  installation_date DATE,
+  last_maintenance DATE,
+  next_maintenance DATE,
+  status VARCHAR(50) DEFAULT 'operational',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+
+#### **Maintenance Records Table**
+
+```sql
+CREATE TABLE maintenance_records (
+  id VARCHAR(50) PRIMARY KEY,
+  equipment_id VARCHAR(50) REFERENCES equipment(id),
+  maintenance_type VARCHAR(50) NOT NULL,
+  description TEXT,
+  technician VARCHAR(255),
+  start_time TIMESTAMP,
+  end_time TIMESTAMP,
+  parts_used JSON,
+  cost DECIMAL(10,2),
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
 ### **API Integration**
 
-#### **1. File Upload Service**
+#### **Equipment API Endpoints**
 
 ```typescript
-// Upload files to cloud storage
-const uploadFile = async (file: File, category: string) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('category', category);
-  formData.append(
-    'metadata',
-    JSON.stringify({
-      uploadedBy: user.id,
-      uploadedAt: new Date(),
-      tags: ['equipment', 'maintenance'],
-    }),
+// GET /api/equipment
+export async function getEquipment(req: Request, res: Response) {
+  try {
+    const equipment = await prisma.equipment.findMany({
+      include: {
+        maintenanceRecords: {
+          orderBy: { createdAt: 'desc' },
+          take: 5,
+        },
+      },
+    });
+    res.json(equipment);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch equipment' });
+  }
+}
+
+// POST /api/equipment
+export async function createEquipment(req: Request, res: Response) {
+  try {
+    const equipment = await prisma.equipment.create({
+      data: req.body,
+    });
+    res.status(201).json(equipment);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create equipment' });
+  }
+}
+```
+
+#### **Maintenance API Endpoints**
+
+```typescript
+// GET /api/maintenance/schedule
+export async function getMaintenanceSchedule(req: Request, res: Response) {
+  try {
+    const schedule = await calculateMaintenanceScheduleForAllEquipment();
+    res.json(schedule);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch maintenance schedule' });
+  }
+}
+
+// POST /api/maintenance/records
+export async function createMaintenanceRecord(req: Request, res: Response) {
+  try {
+    const record = await prisma.maintenanceRecords.create({
+      data: req.body,
+    });
+    res.status(201).json(record);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create maintenance record' });
+  }
+}
+```
+
+### **Frontend Integration**
+
+#### **Equipment Management Component**
+
+```tsx
+// EquipmentList.tsx
+import React, { useState, useEffect } from 'react';
+import { FileUpload } from './components/utils/FileUpload';
+import { exportEquipmentReport } from '../utils/fileStorage';
+
+export const EquipmentList: React.FC = () => {
+  const [equipment, setEquipment] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchEquipment();
+  }, []);
+
+  const handleExport = async () => {
+    try {
+      await exportEquipmentReport(equipment);
+    } catch (error) {
+      console.error('Export failed:', error);
+    }
+  };
+
+  return (
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Equipment Management</h1>
+        <button onClick={handleExport} className="bg-primary text-white px-4 py-2 rounded">
+          Export Data
+        </button>
+      </div>
+
+      <FileUpload
+        onFilesSelected={handleFileUpload}
+        acceptedTypes={['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']}
+        maxSizeMB={10}
+        multiple={false}
+      />
+
+      {/* Equipment list rendering */}
+    </div>
   );
-
-  const response = await fetch('/api/upload', {
-    method: 'POST',
-    body: formData,
-  });
-
-  return response.json();
 };
 ```
 
-#### **2. PDF Generation Service**
+#### **Maintenance Dashboard Component**
 
-```typescript
-// Generate and store PDF reports
-const generateAndStoreReport = async (reportData: PDFReportData) => {
-  const pdfBytes = await generateEquipmentReport(reportData);
+```tsx
+// MaintenanceDashboard.tsx
+import React, { useState, useEffect } from 'react';
+import { generateEquipmentReport } from '../utils/pdf';
 
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  const filename = `report_${reportData.title.replace(/\s+/g, '_')}_${Date.now()}.pdf`;
+export const MaintenanceDashboard: React.FC = () => {
+  const [maintenanceData, setMaintenanceData] = useState(null);
 
-  // Upload to cloud storage
-  const uploadResponse = await uploadFile(blob, 'reports');
+  const handleGenerateReport = async () => {
+    try {
+      const reportData = {
+        title: 'Monthly Maintenance Report',
+        date: new Date().toISOString().split('T')[0],
+        equipmentData: maintenanceData.equipment,
+        maintenanceNotes: maintenanceData.notes,
+        technician: maintenanceData.technician,
+      };
 
-  return uploadResponse;
+      const pdfBytes = await generateEquipmentReport(reportData);
+      // Handle PDF download
+    } catch (error) {
+      console.error('Report generation failed:', error);
+    }
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Maintenance Dashboard</h1>
+
+      <button
+        onClick={handleGenerateReport}
+        className="bg-primary text-white px-4 py-2 rounded mb-4"
+      >
+        Generate Report
+      </button>
+
+      {/* Dashboard content */}
+    </div>
+  );
 };
-```
-
-### **Database Integration**
-
-#### **1. Equipment Data Model**
-
-```typescript
-// Prisma schema for equipment
-model Equipment {
-  id          String   @id @default(cuid())
-  name        String
-  type        String
-  location    String
-  specifications Json
-  maintenanceHistory Maintenance[]
-  performanceData PerformanceData[]
-  documents   Document[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Maintenance {
-  id          String   @id @default(cuid())
-  equipmentId String
-  equipment   Equipment @relation(fields: [equipmentId], references: [id])
-  type        String
-  scheduledDate DateTime
-  completedDate DateTime?
-  technician  String
-  notes       String?
-  documents   Document[]
-  createdAt   DateTime @default(now())
-}
 ```
 
 ## 🚀 Deployment Considerations
 
-### **1. Environment Variables**
+### **Environment Configuration**
 
-```env
-# File Storage
-AWS_S3_BUCKET=industrial-refrigeration-files
-AWS_S3_REGION=us-east-1
-AWS_ACCESS_KEY_ID=your_access_key
-AWS_SECRET_ACCESS_KEY=your_secret_key
-
-# PDF Generation
-PDF_GENERATION_API_KEY=your_pdf_api_key
-
-# Email Service
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password
+```bash
+# .env.local
+DATABASE_URL="postgresql://user:password@localhost:5432/refrigeration_db"
+NEXT_PUBLIC_API_URL="http://localhost:3000/api"
+AWS_ACCESS_KEY_ID="your-access-key"
+AWS_SECRET_ACCESS_KEY="your-secret-key"
+AWS_REGION="us-east-1"
+AWS_S3_BUCKET="your-bucket-name"
 ```
 
-### **2. Performance Optimization**
+### **Build Configuration**
 
-```typescript
-// Implement caching for calculations
-const calculationCache = new Map();
-
-const getCachedCalculation = (key: string, calculation: () => number) => {
-  if (calculationCache.has(key)) {
-    return calculationCache.get(key);
-  }
-
-  const result = calculation();
-  calculationCache.set(key, result);
-  return result;
-};
-```
-
-### **3. Error Handling**
-
-```typescript
-// Comprehensive error handling
-const handleFileUpload = async (files: File[]) => {
-  try {
-    const uploadPromises = files.map(async file => {
-      const validation = validateFile(file, acceptedTypes, maxSizeMB);
-      if (!validation.isValid) {
-        throw new Error(validation.error);
-      }
-
-      return await uploadFile(file, 'equipment');
+```json
+// next.config.mjs
+const config = {
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client'],
+  },
+  webpack: (config) => {
+    config.externals.push({
+      'canvas': 'canvas',
     });
-
-    const results = await Promise.all(uploadPromises);
-    return results;
-  } catch (error) {
-    console.error('File upload failed:', error);
-    throw error;
-  }
+    return config;
+  },
 };
+
+export default config;
 ```
 
-## 📈 Future Enhancements
+### **Docker Configuration**
 
-### **1. Advanced Analytics**
+```dockerfile
+# Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+## 🔮 Future Enhancements
+
+### **Advanced Analytics**
 
 - Machine learning for predictive maintenance
 - Anomaly detection in system performance
 - Automated report generation
 - Real-time alerts and notifications
 
-### **2. Mobile Integration**
+### **Mobile Integration**
 
 - Mobile app for field technicians
 - Offline data collection
 - Photo and video documentation
 - GPS location tracking
 
-### **3. IoT Integration**
+### **IoT Integration**
 
 - Real-time sensor data collection
 - Automated system monitoring
 - Predictive analytics
 - Remote system control
 
-### **4. Advanced Reporting**
+### **Advanced Reporting**
 
 - Interactive dashboards
 - Custom report builder
 - Automated email reports
 - Integration with external systems
 
-## 🎯 Conclusion
+## 📚 Conclusion
 
-This comprehensive utilities implementation provides a solid foundation for the Industrial Refrigeration Management SaaS platform. The utilities are designed to be:
+This utilities implementation provides a comprehensive foundation for industrial refrigeration management. The modular design allows for easy integration and extension, while the production-ready code ensures reliability and maintainability.
 
-- **Scalable**: Handle growing data and user requirements
-- **Maintainable**: Well-structured and documented code
-- **Extensible**: Easy to add new features and integrations
-- **User-Friendly**: Intuitive interfaces and workflows
-- **Compliant**: Meet industry standards and regulations
+### **Key Benefits:**
 
-The implementation supports the full lifecycle of industrial refrigeration management, from initial system design through ongoing maintenance and optimization.
+- **Modular Architecture**: Easy to extend and maintain
+- **Type Safety**: Full TypeScript support
+- **Production Ready**: Comprehensive error handling and validation
+- **Scalable**: Designed for enterprise deployment
+- **Well Documented**: Complete implementation guide and examples
+
+### **Next Steps:**
+
+1. Implement database schema
+2. Create API endpoints
+3. Build frontend components
+4. Set up deployment pipeline
+5. Conduct user testing
+6. Deploy to production
+
+For questions or support, refer to the project documentation or contact the development team.
