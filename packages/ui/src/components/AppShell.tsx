@@ -1,3 +1,5 @@
+'use client'; // Enables client-side rendering in Next.js
+
 import React from 'react';
 import { cn } from '../utils/cn';
 import { Button } from './Button';

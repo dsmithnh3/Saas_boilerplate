@@ -1,3 +1,5 @@
+'use client'; // Required for interactive button behaviors
+
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cn } from '../utils/cn';
