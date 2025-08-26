@@ -3,17 +3,16 @@ import type { Config } from 'tailwindcss';
 /**
  * Tailwind configuration for the UI package. This file defines the design
  * tokens used across the application (colors, spacing, typography) and
- * includes the forms plugin for consistent form styling.
+ * includes useful plugins for forms, typography, and aspect ratios.
  */
 const config: Config = {
-  content: [
-    './src/**/*.{ts,tsx}',
-    '../../apps/web/app/**/*.{ts,tsx}',
-  ],
+  content: ['./src/**/*.{ts,tsx}', '../../apps/web/app/**/*.{ts,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
+        background: 'hsl(var(--color-background) / <alpha-value>)',
+        foreground: 'hsl(var(--color-foreground) / <alpha-value>)',
         primary: {
           DEFAULT: 'hsl(var(--color-primary) / <alpha-value>)',
           foreground: 'hsl(var(--color-primary-foreground) / <alpha-value>)',
@@ -48,7 +47,11 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 };
 
 export default config;
