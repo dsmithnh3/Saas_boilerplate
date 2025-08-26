@@ -1,6 +1,5 @@
 import { router } from '../trpc';
 import { projectRouter } from './project';
-import { searchRouter } from './search';
 
 /**
  * Root application router combining all domain routers. Additional routers
@@ -8,7 +7,7 @@ import { searchRouter } from './search';
  */
 export const appRouter = router({
   project: projectRouter,
-  search: searchRouter,
+  // search: searchRouter, // Temporarily disabled due to logger issues
   // equipment: equipmentRouter,
   // task: taskRouter,
   // document: documentRouter,

@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import type { NextAuthOptions } from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@acme/db';
 import { env } from '@acme/config';
@@ -22,6 +23,18 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/login',
   },
   providers: [
+    // Minimal credentials provider to allow build-time initialization
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize() {
+        // Return null to deny by default; real auth handled via OAuth
+        return null;
+      },
+    }),
     // Only add GitHub provider if credentials are configured
     ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET
       ? [
@@ -43,9 +56,4 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth(authOptions);
+export const { auth, signIn, signOut } = NextAuth(authOptions);

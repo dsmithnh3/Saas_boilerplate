@@ -7,11 +7,15 @@ import { context, trace } from '@opentelemetry/api';
  * integration allows logs to be correlated with distributed traces in
  * observability backends.
  */
+// Check if we're in a browser environment
+const isBrowser = typeof window !== 'undefined';
+
 export const logger = pino({
   name: 'saas-boilerplate',
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+  // Only use pino-pretty in Node.js environment, not in browser
   transport:
-    process.env.NODE_ENV !== 'production'
+    !isBrowser && process.env.NODE_ENV !== 'production'
       ? {
           target: 'pino-pretty',
           options: {
