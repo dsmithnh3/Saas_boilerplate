@@ -150,11 +150,12 @@ model Notification {
 
 /// The Embedding table stores high‑dimensional vectors for semantic search.
 /// Each record references a Document and contains a 1536‑dimension vector.
+/// Note: Vector type requires pgvector extension to be installed in PostgreSQL
 model Embedding {
   id         String    @id @default(cuid())
   documentId String
   document   Document  @relation(fields: [documentId], references: [id])
-  vector     Vector    @db.Vector(1536)
+  vector     String    // Store as JSON string for now, can be converted to Vector when pgvector is available
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 }

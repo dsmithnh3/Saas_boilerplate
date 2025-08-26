@@ -102,7 +102,7 @@ export function calculatePressureDrop(
   flowRate: number,
   pipeLength: number,
   pipeDiameter: number,
-  roughness: number,
+  _roughness: number,
 ): number {
   if (pipeDiameter <= 0) return 0;
   const velocity = flowRate / (Math.PI * Math.pow(pipeDiameter / 2, 2));
@@ -157,7 +157,7 @@ export function calculateMaintenanceSchedule(
 export function calculateRefrigerantCharge(
   systemVolume: number,
   refrigerantType: string,
-  operatingConditions: { evaporatorTemp: number; condenserTemp: number },
+  _operatingConditions: { evaporatorTemp: number; condenserTemp: number },
 ): number {
   const densityFactors: Record<string, number> = {
     ammonia: 0.6,

@@ -1,6 +1,6 @@
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 import { z } from 'zod';
-import { createProjectSchema } from '@acme/db/schemas';
+import { createProjectSchema } from '@acme/db';
 import { TRPCError } from '@trpc/server';
 
 /**

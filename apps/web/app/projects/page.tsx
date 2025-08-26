@@ -1,5 +1,6 @@
 import { AppShell } from '@acme/ui';
-import { trpc } from '@/lib/trpc';
+import { appRouter } from '@/server/routers';
+import { createContext } from '@/server/context';
 
 /**
  * Lists all projects accessible to the current user. Data is fetched
@@ -8,7 +9,8 @@ import { trpc } from '@/lib/trpc';
  * router level to redirect unauthenticated users.
  */
 export default async function ProjectsPage() {
-  const projects = await trpc.project.list.query();
+  const caller = appRouter.createCaller(await createContext());
+  const projects = await caller.project.list();
   const nav = [
     { label: 'Dashboard', href: '/dashboard' },
     { label: 'Projects', href: '/projects' },
@@ -23,7 +25,7 @@ export default async function ProjectsPage() {
           <p>No projects found.</p>
         ) : (
           <ul className="space-y-2">
-            {projects.map(p => (
+            {projects.map((p: { id: string; name: string }) => (
               <li
                 key={p.id}
                 className="rounded-md bg-muted p-4 shadow transition-colors hover:bg-accent hover:text-accent-foreground"

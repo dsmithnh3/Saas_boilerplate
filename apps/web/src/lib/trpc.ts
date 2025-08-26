@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import superjson from 'superjson';

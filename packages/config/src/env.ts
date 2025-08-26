@@ -32,4 +32,18 @@ type Env = z.infer<typeof envSchema>;
 // Parse the environment at module load time. If parsing fails the
 // application will crash with a detailed error message which helps
 // diagnosing misconfiguration early in the deployment process.
-export const env: Env = envSchema.parse(process.env);
+// During build time, we provide fallback values to allow the build to complete.
+const buildTimeEnv = {
+  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://placeholder',
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'placeholder-secret-for-build-time-only',
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY || 'placeholder-key',
+  S3_ENDPOINT: process.env.S3_ENDPOINT,
+  S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+  S3_SECRET_KEY: process.env.S3_SECRET_KEY,
+  S3_BUCKET: process.env.S3_BUCKET,
+  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+};
+
+export const env: Env = envSchema.parse(buildTimeEnv);

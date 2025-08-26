@@ -2,6 +2,7 @@
 
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import type { FileRejection, FileError } from 'react-dropzone';
 import { Upload, File, X, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@acme/ui';
 import { validateFile, formatFileSize } from '../../utils/fileStorage';
@@ -28,10 +29,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   className = '',
 }) => {
   const onDrop = useCallback(
-    (acceptedFiles: File[], rejectedFiles: any[]) => {
+    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach(({ file, errors }) => {
-          errors.forEach((error: any) => {
+          errors.forEach((error: FileError) => {
             console.error(`File ${file.name} was rejected:`, error.message);
           });
         });
@@ -124,7 +125,7 @@ export const FileList: React.FC<FileListProps> = ({ files, onRemove, className =
               <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => onRemove(index)} className="h-8 w-8 p-0">
+          <Button variant="outline" onClick={() => onRemove(index)} className="h-8 w-8 p-0">
             <X className="h-4 w-4" />
           </Button>
         </div>

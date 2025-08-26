@@ -53,3 +53,4 @@ export async function execute<T>(
 }
 
 export * from '@prisma/client';
+export * from './schemas';

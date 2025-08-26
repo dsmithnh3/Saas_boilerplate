@@ -27,7 +27,11 @@ export function downloadBlob(blob: Blob, filename: string): void {
   URL.revokeObjectURL(url);
 }
 
-export function exportToExcel(data: any[], filename: string, sheetName: string = 'Sheet1'): void {
+export function exportToExcel(
+  data: unknown[],
+  filename: string,
+  sheetName: string = 'Sheet1',
+): void {
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
@@ -38,7 +42,7 @@ export function exportToExcel(data: any[], filename: string, sheetName: string =
   downloadBlob(blob, `${filename}.xlsx`);
 }
 
-export function importFromExcel(file: File): Promise<any[]> {
+export function importFromExcel(file: File): Promise<unknown[]> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = e => {
@@ -48,7 +52,7 @@ export function importFromExcel(file: File): Promise<any[]> {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
-        resolve(jsonData);
+        resolve(jsonData as unknown[]);
       } catch (error) {
         reject(error);
       }

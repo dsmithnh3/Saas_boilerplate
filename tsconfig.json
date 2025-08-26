@@ -20,9 +20,13 @@
     "baseUrl": ".",
     "paths": {
       "@acme/db": ["packages/db/src"],
+      "@acme/db/*": ["packages/db/src/*"],
       "@acme/ui": ["packages/ui/src"],
+      "@acme/ui/*": ["packages/ui/src/*"],
       "@acme/config": ["packages/config/src"],
-      "@acme/ai": ["packages/ai/src"]
+      "@acme/config/*": ["packages/config/src/*"],
+      "@acme/ai": ["packages/ai/src"],
+      "@acme/ai/*": ["packages/ai/src/*"]
     }
   },
   "include": ["apps/**/*", "packages/**/*", "tests/**/*", "e2e/**/*"],

@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import type { NextAuthConfig } from 'next-auth';
+import type { NextAuthOptions } from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@acme/db';
@@ -12,7 +12,7 @@ import { env } from '@acme/config';
  * support additional OAuth services; in this example we include GitHub
  * and leave room for passkey/WebAuthn providers.
  */
-export const authOptions: NextAuthConfig = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   secret: env.NEXTAUTH_SECRET,
   session: {
@@ -22,10 +22,15 @@ export const authOptions: NextAuthConfig = {
     signIn: '/auth/login',
   },
   providers: [
-    GitHubProvider({
-      clientId: env.GITHUB_CLIENT_ID ?? '',
-      clientSecret: env.GITHUB_CLIENT_SECRET ?? '',
-    }),
+    // Only add GitHub provider if credentials are configured
+    ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET
+      ? [
+          GitHubProvider({
+            clientId: env.GITHUB_CLIENT_ID,
+            clientSecret: env.GITHUB_CLIENT_SECRET,
+          }),
+        ]
+      : []),
     // Additional providers (e.g. WebAuthn passkeys, Google) can be added here.
   ],
   callbacks: {

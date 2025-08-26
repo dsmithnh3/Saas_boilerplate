@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { signIn } from 'next-auth/react';
 import { Button } from '@acme/ui';
@@ -17,11 +17,15 @@ export default function LoginPage() {
         <h1 className="mb-6 text-2xl font-semibold">Sign in</h1>
         <div className="space-y-4">
           {/* OAuth sign‑in button */}
-          <Button className="w-full" onClick={() => signIn('github')}>Sign in with GitHub</Button>
+          <Button className="w-full" onClick={() => signIn('github')}>
+            Sign in with GitHub
+          </Button>
           {/* Placeholder for passkey sign‑in. In a real implementation this would
               invoke the WebAuthn API and call a server action to verify
               credentials. */}
-          <Button variant="secondary" className="w-full" disabled>Sign in with Passkey (coming soon)</Button>
+          <Button variant="secondary" className="w-full" disabled>
+            Sign in with Passkey (coming soon)
+          </Button>
         </div>
       </div>
     </div>

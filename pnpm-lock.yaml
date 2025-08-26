@@ -55,6 +55,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@acme/ai':
+        specifier: workspace:^1.0.0
+        version: link:../../packages/ai
       '@acme/config':
         specifier: workspace:^1.0.0
         version: link:../../packages/config

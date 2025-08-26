@@ -32,7 +32,9 @@ export default function DashboardPage() {
       <section className="mt-8 space-y-4">
         <h3 className="text-lg font-semibold">Recent Activity</h3>
         <ul className="space-y-2">
-          <li className="rounded-md bg-muted p-4">John Smith uploaded a document to Project Alpha.</li>
+          <li className="rounded-md bg-muted p-4">
+            John Smith uploaded a document to Project Alpha.
+          </li>
           <li className="rounded-md bg-muted p-4">New task created: Inspect compressor unit.</li>
           <li className="rounded-md bg-muted p-4">Estimation report approved for Project Beta.</li>
         </ul>

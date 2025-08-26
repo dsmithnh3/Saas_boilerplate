@@ -1,6 +1,10 @@
 import { AppShell } from '@acme/ui';
-import { trpc } from '@/lib/trpc';
+import { appRouter } from '@/server/routers';
+import { createContext } from '@/server/context';
 import { notFound } from 'next/navigation';
+
+// Avoid prerendering at build time because this page depends on runtime data
+export const dynamic = 'force-dynamic';
 
 interface ProjectPageProps {
   params: { id: string };
@@ -12,7 +16,8 @@ interface ProjectPageProps {
  * built‑in `notFound()` helper triggers a 404 page.
  */
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const project = await trpc.project.get.query({ id: params.id });
+  const caller = appRouter.createCaller(await createContext());
+  const project = await caller.project.get({ id: params.id });
   if (!project) {
     notFound();
   }
@@ -22,7 +27,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     { label: project.name, href: `/projects/${project.id}` },
   ];
   return (
-    <AppShell navItems={nav} headerContent={<h2 className="text-lg font-semibold">{project.name}</h2>}>
+    <AppShell
+      navItems={nav}
+      headerContent={<h2 className="text-lg font-semibold">{project.name}</h2>}
+    >
       <div className="space-y-6">
         <section>
           <h3 className="text-md font-semibold">Project Description</h3>
@@ -34,7 +42,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p>No equipment associated with this project.</p>
           ) : (
             <ul className="ml-4 list-disc">
-              {project.equipment.map(eq => (
+              {project.equipment.map((eq: { id: string; name: string }) => (
                 <li key={eq.id}>{eq.name}</li>
               ))}
             </ul>
@@ -46,7 +54,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p>No tasks defined.</p>
           ) : (
             <ul className="ml-4 list-disc">
-              {project.tasks.map(task => (
+              {project.tasks.map((task: { id: string; title: string }) => (
                 <li key={task.id}>{task.title}</li>
               ))}
             </ul>
@@ -58,7 +66,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p>No documents uploaded.</p>
           ) : (
             <ul className="ml-4 list-disc">
-              {project.documents.map(doc => (
+              {project.documents.map((doc: { id: string; title: string }) => (
                 <li key={doc.id}>{doc.title}</li>
               ))}
             </ul>
@@ -70,7 +78,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p>No estimates available.</p>
           ) : (
             <ul className="ml-4 list-disc">
-              {project.estimates.map(est => (
+              {project.estimates.map((est: { id: string; name: string }) => (
                 <li key={est.id}>{est.name}</li>
               ))}
             </ul>
